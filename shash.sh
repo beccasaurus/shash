@@ -12,8 +12,14 @@ shash() {
 
 shash_set() {
 	hash=$1; key=$2; value=$3
+
+	# set variable for this key
 	varname=`shash_variable_name_for_hash_and_key "$hash" "$key"`
 	eval "$varname='$value'"
+
+	# update the variable that stores the names of all keys for this hash
+	keys_varname=`shash_variable_name_for_hash_keys "$hash"`
+	eval "${keys_varname}=\"\${${keys_varname}}${key}\n\""
 }
 
 shash_get() {
@@ -22,11 +28,30 @@ shash_get() {
 	eval "echo \$${varname}"
 }
 
+shash_variable_name_for_hash_keys() {
+	varname=`shash_safe_variable_name "$1"`
+	echo "__shash__${varname}__keys"
+}
+
 shash_variable_name_for_hash_and_key() {
 	hash=$1; key=$2
-	safe_hash=`echo "$hash" | sed 's/[^[:alnum:]]//g'`
-	safe_key=` echo "$key"  | sed 's/[^[:alnum:]]//g'`
+	safe_hash=`shash_safe_variable_name "$hash"`
+	safe_key=` shash_safe_variable_name "$key"`
 	echo "__shash__${safe_hash}__${safe_key}"
+}
+
+shash_safe_variable_name() {
+	echo `echo "$1" | sed 's/[^[:alnum:]]//g'`
+}
+
+shash_keys() {
+	hash=$1
+	keys_varname=`shash_variable_name_for_hash_keys "$hash"`
+	eval "echo \"\$$keys_varname\""
+}
+
+shash_values() {
+	echo `shash_keys dogs`
 }
 
 shash_define() {

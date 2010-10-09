@@ -4,8 +4,8 @@ Bundler.require
 require 'open3'
 
 module HelperMethods
-  def reset_session!
-    @stdin, @stdout, @stderr = Open3.popen3('/bin/sh')
+  def reset_session! shell = '/bin/sh'
+    @stdin, @stdout, @stderr = Open3.popen3(shell)
     run ". #{File.dirname(__FILE__)}/shash.sh"
   end
 
