@@ -69,6 +69,41 @@ describe 'shash' do
         result('shash_values dogs').should == "retriever\nbeagle"
       end
 
+      it 'can delete a key from a hash' do
+        run 'shash_define dogs'
+        run 'dogs Rover retriever'
+        run 'dogs Lander "American Pitbull Terrier"'
+        run 'dogs Murdock "Australian Shepherd"'
+        run 'dogs "Long Name" "A kind of dog"'
+
+        result('dogs_keys').should == "Rover\nLander\nMurdock\nLong Name"
+
+        run 'shash_delete dogs Lander'
+        result('dogs_keys').should == "Rover\nMurdock\nLong Name"
+
+        run 'dogs_delete "Long Name"'
+        result('dogs_keys').should == "Rover\nMurdock"
+
+        run 'dogs_delete Rover'
+        result('dogs_keys').should == "Murdock"
+      end
+
+      it 'can easily do something for each item (without having to manually make a for loop)' do
+        run 'shash_define dogs'
+        run 'dogs Rover retriever'
+        run 'dogs Murdock "Australian Shepherd"'
+      
+        result(%{dogs_each 'echo "$key is a $value"'}).should == "Rover is a retriever\nMurdock is a Australian Shepherd"
+      end
+
+      it 'can easily print out something for each item' do
+        run 'shash_define dogs'
+        run 'dogs Rover retriever'
+        run 'dogs Murdock "Australian Shepherd"'
+      
+        result(%{dogs_echo '$key is a $value'}).should == "Rover is a retriever\nMurdock is a Australian Shepherd"
+      end
+
       # Methods of persistance (ideas) ...
       #
       #  - dynamically named variables, 1 for each key

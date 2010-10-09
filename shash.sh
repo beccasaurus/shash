@@ -61,16 +61,59 @@ shash_values() {
 
 shash_keys_and_values() {
 	hash="$1"
+	shash_echo "$hash" '$key: $value'
+}
+
+shash_each() {
+	hash=$1
+	code=$2
 	for key in `shash_keys "$hash"`; do
 		value=`shash_get "$hash" "$key"`
-		printf "$key: $value\n"
+		eval "$code"
 	done
+}
+
+shash_echo() {
+	hash=$1
+	code=$2
+	shash_each "$hash" "echo \"$code\""
+}
+
+shash_delete() {
+	hash=$1
+	key=$2
+
+	# unset the actual variable
+	hash_and_key_variable=`shash_variable_name_for_hash_and_key "$hash" "$key"`
+	eval "unset $hash_and_key_variable"
+
+	# remove the key from our list of keys
+	keys_varname=`shash_variable_name_for_hash_keys "$hash"`
+	old_keys=`shash_keys "$hash"`
+	new_keys=`echo "$old_keys" | grep -v "^${key}$"`
+	eval "${keys_varname}=\"$new_keys\""
 }
 
 shash_define() {
 	hash=$1
-
-	eval "${hash}() {
+eval "
+	${hash}() {
 		shash \"${hash}\" \"\$@\"
-	}"
+	}
+	${hash}_keys() {
+		shash_keys \"${hash}\"
+	}
+	${hash}_values() {
+		shash_values \"${hash}\"
+	}
+	${hash}_delete() {
+		shash_delete \"${hash}\" \"\$@\"
+	}
+	${hash}_each() {
+		shash_each \"${hash}\" \"\$@\"
+	}
+	${hash}_echo() {
+		shash_echo \"${hash}\" \"\$@\"
+	}
+"
 }
