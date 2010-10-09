@@ -22,28 +22,28 @@ To view this example code: [example.sh](/remi/shash/blob/master/example.sh)
 
 Now that you have a few items in your Hash, there are a few ways you can use them ...
 
-    >> dogs Snoopy
+    $ dogs Snoopy
     Beagle
 
-    >> dogs_keys
+    $ dogs_keys
     Snoopy
     Scooby-Doo
     Lady
     Tramp
 
-    >> dogs_values
+    $ dogs_values
     Beagle
     Great Dane
     Cocker Spaniel
     Mutt
 
-    >> dogs
+    $ dogs
     Snoopy: Beagle
     Scooby-Doo: Great Dane
     Lady: Cocker Spaniel
     Tramp: Mutt
 
-    >> dogs_echo 'The dog named $key is a $value'
+    $ dogs_echo 'The dog named $key is a $value'
     The dog named Snoopy is a Beagle
     The dog named Scooby-Doo is a Great Dane
     The dog named Lady is a Cocker Spaniel

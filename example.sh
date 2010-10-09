@@ -7,23 +7,23 @@ dogs Scooby-Doo "Great Dane"
 dogs Lady       "Cocker Spaniel"
 dogs Tramp      Mutt
 
-echo ">> dogs Snoopy"
+echo "$ dogs Snoopy"
 dogs Snoopy
 echo ""
 
-echo ">> dogs_keys"
+echo "$ dogs_keys"
 dogs_keys
 echo ""
 
-echo ">> dogs_values"
+echo "$ dogs_values"
 dogs_values
 echo ""
 
-echo ">> dogs"
+echo "$ dogs"
 dogs
 echo ""
 
-echo ">> dogs_echo 'The dog named \$key is a \$value'"
+echo "$ dogs_echo 'The dog named \$key is a \$value'"
 dogs_echo 'The dog named $key is a $value'
 echo ""
 
