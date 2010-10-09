@@ -41,6 +41,20 @@ describe 'shash' do
     result.should == 'beagle'
   end
 
+  it 'should be able to dynamically create a helper function to set/get keys from a particular hash' do
+    run %{shash_define dogs}
+    run %{dogs Lander "American Pitbull Terrier"}
+    run %{dogs Lander}
+    result.should == 'American Pitbull Terrier'
+
+    run %{dogs Murdock}
+    result.should == ''
+
+    run %{dogs Murdock "Australian Shepherd"}
+    run %{dogs Murdock}
+    result.should == 'Australian Shepherd'
+  end
+
   # Methods of persistance (ideas) ...
   #
   #  - dynamically named variables, 1 for each key

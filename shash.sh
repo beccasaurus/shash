@@ -1,21 +1,29 @@
 # shash - Hash functionality for /bin/sh
 
 shash() {
-	hash=$1; key=$2; value=$3
+	hash="$1"; key="$2"; value="$3"
 
 	if [ -z "$value" ]; then
-		shash_get $hash $key
+		shash_get "$hash" "$key"
 	else
-		shash_set $hash $key $value
+		shash_set "$hash" "$key" "$value"
 	fi
 }
 
 shash_set() {
 	hash=$1; key=$2; value=$3
-	eval "__shash__${hash}__${key}=${value}"
+	eval "__shash__${hash}__${key}='${value}'"
 }
 
 shash_get() {
 	hash=$1; key=$2
 	eval "echo \$__shash__${hash}__${key}"
+}
+
+shash_define() {
+	hash=$1
+
+	eval "${hash}() {
+		shash \"${hash}\" \"\$@\"
+	}"
 }
