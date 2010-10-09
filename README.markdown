@@ -9,7 +9,7 @@ It is compatible with /bin/sh and should be compatible with all of its descendan
 
 ## Usage
 
-To view this example code: [example.sh](/remi/shash/blob/master/example.sh)
+To view this example code: [example.sh](/remi/shash/blob/master/examples/example.sh)
 
     . shash.sh
 
@@ -67,4 +67,4 @@ Then you can:
     $ cd /path/to/shash
     $ gem install bundler
     $ bundle install
-    $ bundle exec rspec --color --format documentation shash_spec.rb
+    $ bundle exec rspec --color --format documentation spec/
