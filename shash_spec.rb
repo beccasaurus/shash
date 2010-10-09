@@ -12,7 +12,7 @@ describe 'shash' do
     run ". #{File.dirname(__FILE__)}/shash.sh"
   end
 
-  def run(cmd) puts cmd; @stdin.puts(cmd) end
+  def run(cmd) @stdin.puts(cmd) end
 
   def result() @stdout.gets.chomp end
 
@@ -40,5 +40,14 @@ describe 'shash' do
     run %{shash dogs Snoopy}
     result.should == 'beagle'
   end
+
+  # Methods of persistance (ideas) ...
+  #
+  #  - dynamically named variables, 1 for each key
+  #  - dynamically named variables, 1 for each hash
+  #  - a file
+  #  - a BASH associative array
+  #  - a zsh associative array
+  it 'should be able to configure the method of persistance shash uses (?)'
 
 end
