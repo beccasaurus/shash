@@ -3,6 +3,8 @@
 
 # Public API
 
+# TODO move all of the implementation dependent methods into a default "implementation"
+
 shash() {
 	hash=$1; key=$2; value=$3
 
@@ -99,7 +101,7 @@ __shash_variable_name_for_hash_and_key() {
 }
 
 __shash_safe_variable_name() {
-	printf `printf "$1" | sed 's/[^[:alnum:]]//g'`
+	printf "`printf "$1" | sed 's/[^[:alnum:]]//g'`"
 }
 
 __shash_set() {
