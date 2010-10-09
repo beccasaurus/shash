@@ -1,4 +1,7 @@
 # shash - Hash functionality for /bin/sh
+# ======================================
+
+# Public API
 
 shash() {
 	hash=$1; key=$2; value=$3
@@ -6,28 +9,10 @@ shash() {
 	if [ -z "$key" ]; then
 		shash_keys_and_values "$hash"
 	elif [ -z "$value" ]; then
-		shash_get "$hash" "$key"
+		__shash_get "$hash" "$key"
 	else
-		shash_set "$hash" "$key" "$value"
+		__shash_set "$hash" "$key" "$value"
 	fi
-}
-
-shash_set() {
-	hash=$1; key=$2; value=$3
-
-	# set variable for this key
-	varname=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
-	eval "$varname='$value'"
-
-	# update the variable that stores the names of all keys for this hash
-	keys_varname=`__shash_variable_name_for_hash_keys "$hash"`
-	eval "${keys_varname}=\"\${${keys_varname}}${key}\n\""
-}
-
-shash_get() {
-	hash=$1; key=$2
-	varname=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
-	eval "echo \$${varname}"
 }
 
 shash_keys() {
@@ -49,7 +34,7 @@ shash_keys_and_values() {
 shash_each() {
 	hash=$1; code=$2
 	for key in `shash_keys "$hash"`; do
-		value=`shash_get "$hash" "$key"`
+		value=`__shash_get "$hash" "$key"`
 		eval "$code"
 	done
 }
@@ -99,7 +84,7 @@ eval "
 "
 }
 
-# PRIVATE
+# Private functions
 
 __shash_variable_name_for_hash_keys() {
 	varname=`__shash_safe_variable_name "$1"`
@@ -115,5 +100,23 @@ __shash_variable_name_for_hash_and_key() {
 
 __shash_safe_variable_name() {
 	printf `printf "$1" | sed 's/[^[:alnum:]]//g'`
+}
+
+__shash_set() {
+	hash=$1; key=$2; value=$3
+
+	# set variable for this key
+	varname=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
+	eval "$varname='$value'"
+
+	# update the variable that stores the names of all keys for this hash
+	keys_varname=`__shash_variable_name_for_hash_keys "$hash"`
+	eval "${keys_varname}=\"\${${keys_varname}}${key}\n\""
+}
+
+__shash_get() {
+	hash=$1; key=$2
+	varname=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
+	eval "echo \$${varname}"
 }
 
