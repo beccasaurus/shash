@@ -68,3 +68,8 @@ Then you can:
     $ gem install bundler
     $ bundle install
     $ bundle exec rspec --color --format documentation spec/
+
+## TODO
+
+    - Try porting specs to roundup
+    - Implement additional "backend" implementations
