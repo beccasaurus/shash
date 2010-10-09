@@ -9,7 +9,7 @@ It is compatible with /bin/sh and should be compatible with all of its descendan
 
 ## Usage
 
-To view this example code: [example.sh](example.sh)
+To view this example code: [example.sh](/remi/shash/blob/master/example.sh)
 
     . shash.sh
 
