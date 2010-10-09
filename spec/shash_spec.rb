@@ -122,6 +122,16 @@ describe 'shash' do
       #  - a file
       #  - a BASH associative array ?
       #  - a zsh associative array  ?
+      #
+      #  For file persistance, it would be nice to be able to share 
+      #  the same shash 'session' with another shell.  By default, 
+      #  we could set a token based on unix time (`date +%s`) but 
+      #  maybe you can also:
+      #  - list the available sessions
+      #  - create/join a named session
+      #
+      #  If we do this, we should implement some simple file locking 
+      #  for WRITES (which should be quick, append-only).
       context 'persistance techniques' do
 
         example '1 dynamically named variable for each hash key' do
