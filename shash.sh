@@ -3,7 +3,9 @@
 shash() {
 	hash="$1"; key="$2"; value="$3"
 
-	if [ -z "$value" ]; then
+	if [ -z "$key" ]; then
+		shash_keys_and_values "$hash"
+	elif [ -z "$value" ]; then
 		shash_get "$hash" "$key"
 	else
 		shash_set "$hash" "$key" "$value"
@@ -51,7 +53,18 @@ shash_keys() {
 }
 
 shash_values() {
-	printf `shash_keys dogs`
+	hash=$1
+	for key in `shash_keys "$hash"`; do
+		shash "$hash" "$key"
+	done
+}
+
+shash_keys_and_values() {
+	hash="$1"
+	for key in `shash_keys "$hash"`; do
+		value=`shash_get "$hash" "$key"`
+		printf "$key: $value\n"
+	done
 }
 
 shash_define() {

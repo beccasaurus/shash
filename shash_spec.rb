@@ -45,7 +45,13 @@ describe 'shash' do
         result('dogs "^Little @Monster"').should == '%Terrifying $ Little* Bastard~'
       end
 
-      it 'when called without a key or value, all key names are returned'
+      it 'when called without a key or value, all key names AND values are returned' do
+        run 'shash dogs Rover retriever'
+        result('shash dogs').should == "Rover: retriever"
+
+        run 'shash dogs Lander "American Pitbull Terrier"'
+        result('shash dogs').should == "Rover: retriever\nLander: American Pitbull Terrier"
+      end
 
       it 'shash_keys hashname returns all keys' do
         run 'shash dogs Rover retriever'
@@ -55,13 +61,13 @@ describe 'shash' do
         result('shash_keys dogs').should == "Rover\nLander"
       end
 
-      #it 'shash_values hashname returns all values' do
-      #  run 'shash dogs Rover retriever'
-      #  result('shash_values dogs').should == "retriever"
+      it 'shash_values hashname returns all values' do
+        run 'shash dogs Rover retriever'
+        result('shash_values dogs').should == "retriever"
 
-      #  run 'shash dogs Lander beagle'
-      #  result('shash_values dogs').should == "retriever\nbeagle"
-      #end
+        run 'shash dogs Lander beagle'
+        result('shash_values dogs').should == "retriever\nbeagle"
+      end
 
       # Methods of persistance (ideas) ...
       #
