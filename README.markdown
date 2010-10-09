@@ -20,7 +20,7 @@ To view this example code: [example.sh](/remi/shash/blob/master/example.sh)
     dogs Lady       "Cocker Spaniel"
     dogs Tramp      Mutt
 
-Now that you have a few items in your Hash, there are a few ways you can access them.
+Now that you have a few items in your Hash, there are a few ways you can use them ...
 
     >> dogs Snoopy
     Beagle
