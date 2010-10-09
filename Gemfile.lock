@@ -2,6 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     diff-lcs (1.1.2)
+    fattr (2.1.0)
     rspec (2.0.0.rc)
       rspec-core (= 2.0.0.rc)
       rspec-expectations (= 2.0.0.rc)
@@ -12,9 +13,12 @@ GEM
     rspec-mocks (2.0.0.rc)
       rspec-core (= 2.0.0.rc)
       rspec-expectations (= 2.0.0.rc)
+    session (3.1.0)
+      fattr
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  rspec (= 2.0.0.rc)
+  rspec (~> 2.0.0.rc)
+  session (~> 3.1.0)

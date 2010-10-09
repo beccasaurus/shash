@@ -3,18 +3,18 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe 'shash' do
   include HelperMethods
 
-  %w[ /bin/sh /bin/bash ].each do |shell|
+  [ Session::Sh, Session::Bash ].each do |shell|
     describe shell do
       before { reset_session!(shell) }
 
-      it '/bin/sh session test' do
-        result('echo $foo').should == ''
+      it 'session OK' do
+        result('printf "$foo"').should == ''
 
         run 'foo=bar'
-        result('echo $foo').should == 'bar'
+        result('printf "$foo"').should == 'bar'
 
         reset_session!
-        result('echo $foo').should == ''
+        result('printf "$foo"').should == ''
       end
 
       it 'can manually set/get keys from a hash' do
@@ -52,13 +52,7 @@ describe 'shash' do
         result('shash_keys dogs').should == "Rover"
 
         run 'shash dogs Lander beagle'
-
-        run 'shash_keys dogs'
-
-        # we call #gets a few times, each returning a new line
-        result
-        result.should == "Rover"
-        result.should == "Lander"
+        result('shash_keys dogs').should == "Rover\nLander"
       end
 
       #it 'shash_values hashname returns all values' do

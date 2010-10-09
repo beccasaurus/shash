@@ -1,25 +1,23 @@
 require 'rubygems'
 require 'bundler/setup'
 Bundler.require
-require 'open3'
 
 module HelperMethods
-  def reset_session! shell = '/bin/sh'
-    @stdin, @stdout, @stderr = Open3.popen3(shell)
-    run ". #{File.dirname(__FILE__)}/shash.sh"
+  def reset_session! shell_class = Session::Sh
+    @shell = shell_class.new
+    @shell.execute ". #{File.dirname(__FILE__)}/shash.sh"
   end
 
   def run cmd
-    @stdin.puts cmd
+    stdout, stderr = @shell.execute "#{cmd} 2>&1" # redirect all stderr to stdout
+    stdout.to_s.chomp
   end
 
   def result cmd = nil
     run cmd if cmd
-    @stdout.gets.chomp
   end
 
   def echo cmd
     run "echo #{cmd}"
-    result
   end
 end
