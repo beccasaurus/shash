@@ -57,9 +57,7 @@ Now that you have a few items in your Hash, there are a few ways you can use the
 
 ## Tests
 
-To run the test, you need:
-
- - [roundup](http://bmizerany.github.com/roundup/)
+[roundup](http://bmizerany.github.com/roundup/) is required to run the tests.
 
     $ git clone git@github.com:remi/shash.git
     $ cd shash/
