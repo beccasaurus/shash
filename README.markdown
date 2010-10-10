@@ -61,7 +61,6 @@ To run the test, you need:
 
  - [roundup](http://bmizerany.github.com/roundup/)
 
-Then you can:
-
-    $ cd /path/to/shash
+    $ git clone git@github.com:remi/shash.git
+    $ cd shash/
     $ roundup
