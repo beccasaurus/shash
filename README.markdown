@@ -59,17 +59,9 @@ Now that you have a few items in your Hash, there are a few ways you can use the
 
 To run the test, you need:
 
- - ruby
- - RubyGems
+ - [roundup](http://bmizerany.github.com/roundup/)
 
 Then you can:
 
     $ cd /path/to/shash
-    $ gem install bundler
-    $ bundle install
-    $ bundle exec rspec --color --format documentation spec/
-
-## TODO
-
-    - Try porting specs to roundup
-    - Implement additional "backend" implementations
+    $ roundup
