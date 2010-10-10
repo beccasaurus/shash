@@ -1,4 +1,3 @@
-#! /usr/bin/env roundup
 . ./shash.sh
 
 describe "shash"
