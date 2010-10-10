@@ -1,6 +1,6 @@
-. ./shash.sh
+. ../shash.sh
 
-describe "shash"
+describe "shash - PORTED FROM RSpec"
 
 it_can_manually_get_and_set_keys_and_values() {
 	# This will fail if new shell sessions aren't used for each test

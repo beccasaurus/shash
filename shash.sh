@@ -8,7 +8,9 @@
 shash() {
 	hash=$1; key=$2; value=$3
 
-	if [ -z "$key" ]; then
+	if [ -z "$hash" ]; then
+		printf "Usage: shash hash_name [key] [value]"
+	elif [ -z "$key" ]; then
 		shash_keys_and_values "$hash"
 	elif [ -z "$value" ]; then
 		__shash_get "$hash" "$key"
