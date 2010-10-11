@@ -1,0 +1,12 @@
+#! /bin/bash
+
+for shell in /bin/sh /bin/bash; do
+	for implementation in crappy_vars experimental_filestore; do
+		echo -e ""
+		echo -e "Running tests"
+		echo -e "   \e[37mShell:          \e[34m${shell}"
+		echo -e "   \e[37mImplementation: \e[31m${implementation}"
+		echo -e "\e[37m"
+		$shell `which roundup` test/*-test.sh
+	done
+done

@@ -61,7 +61,7 @@ Now that you have a few items in your Hash, there are a few ways you can use the
 
     $ git clone git@github.com:remi/shash.git
     $ cd shash/
-    $ roundup test/*-test.sh
+    $ ./run-tests
 
 Here is the current test output, displaying usage examples.  (This uses my fork of roundup to display the command syntax)
 
@@ -90,3 +90,6 @@ Here is the current test output, displaying usage examples.  (This uses my fork 
       $ dogs_length:                                   [PASS]
     =========================================================
     Tests:   21 | Passed:  21 | Failed:   0
+
+We have more than 1 implementation of shash.  We also like to make sure that shash always works with /bin/sh as well as BASH.  To run a full test, you might 
+want to run something like this:
