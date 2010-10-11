@@ -2,6 +2,22 @@
 
 describe "shash"
 
+before() {
+	shash_implementation crappy_vars
+}
+
+it_can_display_the_current_implementation() { # $ shash_implementation
+	test "`shash_implementation`" "=" "* crappy_vars${CR}  experimental_filestore"
+}
+
+it_can_switch_implementations() { # $ shash_implementation
+	test "`shash_implementation | grep '*'`" "=" "* crappy_vars"
+
+	shash_implementation experimental_filestore
+
+	test "`shash_implementation | grep '*'`" "=" "* experimental_filestore"
+}
+
 it_displays_usage_without_arguments() { # $ shash
 	usage=`shash | head -n 1`
 	test "$usage" "=" "Usage: shash hash_name [key] [value]"
