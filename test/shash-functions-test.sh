@@ -35,6 +35,12 @@ it_can_get_all_keys() { # $ shash_keys dogs
 
 	shash dogs Snoopy "Beagle"
 	test "`shash_keys dogs`" "=" "Rover${CR}Snoopy"
+
+	shash dogs "Long Key Name" "Long Value"
+	test "`shash_keys dogs`" "=" "Rover${CR}Snoopy${CR}Long Key Name"
+
+	shash dogs "Another Long Key Name" "Long Value"
+	test "`shash_keys dogs`" "=" "Rover${CR}Snoopy${CR}Long Key Name${CR}Another Long Key Name"
 }
 
 it_can_get_all_values() { # $ shash_values dogs
@@ -51,6 +57,10 @@ it_can_easily_enumerate_through_all_items() { # $ shash_each dogs 'echo "$key is
 
 	result="`shash_each dogs 'echo "$key is a $value"'`"
 	test "$result" "=" "Rover is a Golden Retriever${CR}Snoopy is a Beagle"
+
+	shash dogs "Long Key Name" "Long Value"
+	result="`shash_each dogs 'echo "$key is a $value"'`"
+	test "$result" "=" "Rover is a Golden Retriever${CR}Snoopy is a Beagle${CR}Long Key Name is a Long Value"
 }
 
 it_can_easily_echo_something_for_all_items() { # $ shash_echo dogs 'The dog $key is a $value'
@@ -59,6 +69,10 @@ it_can_easily_echo_something_for_all_items() { # $ shash_echo dogs 'The dog $key
 
 	result="`shash_echo dogs 'The dog $key is a $value'`"
 	test "$result" "=" "The dog Rover is a Golden Retriever${CR}The dog Snoopy is a Beagle"
+
+	shash dogs "Long Key Name" "Long Value"
+	result="`shash_echo dogs 'The dog $key is a $value'`"
+	test "$result" "=" "The dog Rover is a Golden Retriever${CR}The dog Snoopy is a Beagle${CR}The dog Long Key Name is a Long Value"
 }
 
 it_can_delete_a_key() { # $ shash_delete dogs Rover

@@ -42,10 +42,15 @@ shash_length() {
 
 shash_each() {
 	hash=$1; code=$2
+
+	old_ifs=$IFS
+	IFS='
+	'
 	for key in `shash_keys "$hash"`; do
 		value=`__shash_get "$hash" "$key"`
 		eval "$code"
 	done
+	IFS=$old_ifs
 }
 
 shash_echo() {
