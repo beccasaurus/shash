@@ -122,3 +122,7 @@ it_can_unset_a_shash() { # $ shash_unset dogs
 	test "`shash_length dogs`" "=" "0"
 	test "`dogs_length 2>&1 | grep -o 'not found'`" "=" "not found"
 }
+
+xit_multiple_hashes_do_not_conflict() { # (multiple hashes do not conflict)
+	:
+}
