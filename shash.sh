@@ -1,13 +1,16 @@
 # shash - Hash functionality for /bin/sh
 # ======================================
 
+SHASH_IMPLEMENTATIONS=""
+if [ -z "$SHASH_IMPLEMENTATION" ]; then SHASH_IMPLEMENTATION=crappy_vars; fi
+
+. ./implementations/shash.crappy_vars.sh
+. ./implementations/shash.experimental_filestore.sh
+
 # Public API
 #
 # These functions are NOT implementation dependent.
 # They should all use the current shash_implementation
-
-SHASH_IMPLEMENTATIONS="crappy_vars experimental_filestore"
-SHASH_IMPLEMENTATION=crappy_vars
 
 shash() { hash=$1; key=$2; value=$3;
 
@@ -18,10 +21,20 @@ shash() { hash=$1; key=$2; value=$3;
 	elif [ -z "$value" ]; then
 		shash_call get "$hash" "$key"
 	else
-		__shash_set "$hash" "$key" "$value"
+		shash_call set "$hash" "$key" "$value"
 	fi
 }
 
+# Implementations need to provide 1 function with a name formatted as: shash_[implementation name]
+#
+# This function needs to respond to a few calls:
+#
+#     get $hash $key
+#     set $hash $key $value
+#     keys $hash
+#     unset $hash
+#     unset $hash $key
+#
 shash_implementation() { implementation=$1;
 	if [ -z "$implementation" ]; then
 		for available_implementation in $SHASH_IMPLEMENTATIONS; do
@@ -41,7 +54,7 @@ shash_call() {
 }
 
 shash_keys() { hash=$1;
-	__shash_get_all_keys "$hash"
+	shash_call keys "$hash"
 }
 
 shash_values() { hash=$1;
@@ -72,7 +85,7 @@ shash_echo() { hash=$1; code=$2;
 }
 
 shash_delete() { hash=$1; key=$2;
-	__shash_delete "$@"
+	shash_call unset "$hash" "$key"
 }
 
 shash_declare() { hash=$1;
@@ -85,81 +98,13 @@ shash_declare() { hash=$1;
 	done
 }
 
-shash_unset() { hash=$1;
-	__shash_unset "$hash"
-}
-
-# IMPLEMENTATIONS
-
-# crappy_vars
-
-shash_crappy_vars() {
-	method=$1; shift
-	"shash_crappy_vars__$method" "$@"
-}
-
-shash_crappy_vars__get() { hash=$1; key=$2
-
-	varname=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
-	eval "echo \$${varname}"
-}
-
-# BELOW IS OLD DEPRECATED CODE THAT IS BEING REFACTORED INTO A PROPER IMPLEMENTATION
-
-__shash_variable_name_for_hash_keys() {
-	varname=`__shash_safe_variable_name "$1"`
-	printf "__shash__${varname}__keys"
-}
-
-__shash_variable_name_for_hash_and_key() { hash=$1; key=$2:
-	safe_hash=`__shash_safe_variable_name "$hash"`
-	safe_key=` __shash_safe_variable_name "$key"`
-	printf "__shash__${safe_hash}__${safe_key}"
-}
-
-__shash_safe_variable_name() {
-	printf "`printf "$1" | sed 's/[^[:alnum:]]//g'`"
-}
-
-__shash_set() { hash=$1; key=$2; value=$3;
-	# set variable for this key
-	varname=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
-	eval "$varname='$value'"
-
-	# update the variable that stores the names of all keys for this hash
-	keys_varname=`__shash_variable_name_for_hash_keys "$hash"`
-	eval "${keys_varname}=\"\${${keys_varname}}${key}\n\""
-}
-
-__shash_get_all_keys() { hash=$1;
-	keys_varname=`__shash_variable_name_for_hash_keys "$hash"`
-	eval "printf \"\$$keys_varname\""
-}
-
-__shash_delete() { hash=$1; key=$2;
-	# unset the actual variable
-	hash_and_key_variable=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
-	eval "unset $hash_and_key_variable"
-
-	# remove the key from our list of keys
-	keys_varname=`__shash_variable_name_for_hash_keys "$hash"`
-	old_keys=`shash_keys "$hash"`
-	new_keys=`echo "$old_keys" | grep -v "^${key}$"`
-	eval "${keys_varname}=\"$new_keys\""
-}
-
-__shash_unset() { hash=$1;
-	# unset each hash/key variable
-	for key in `shash_keys "$hash"`; do
-		unset `__shash_variable_name_for_hash_and_key "$hash" "$key"`
-	done
-
-	# unset the variable that holds all key names
-	unset `__shash_variable_name_for_hash_keys "$hash"`
-
-	# unset all of the functions
+shash_undeclare() { hash=$1
 	unset -f "$hash"
 	for method in keys values delete each echo length; do
 		unset -f "${hash}_${method}"
 	done
+}
+
+shash_unset() { hash=$1;
+	shash_call unset "$hash"
 }

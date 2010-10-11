@@ -1,21 +1,21 @@
-. ./test-helper.sh
+. ./test/test-helper.sh
 
 describe "shash"
 
 before() {
-	shash_implementation crappy_vars
-}
-
-it_can_display_the_current_implementation() { # $ shash_implementation
-	test "`shash_implementation`" "=" "* crappy_vars${CR}  experimental_filestore"
+	cleanup_if_experimental_filestore
 }
 
 it_can_switch_implementations() { # $ shash_implementation
+	local current_implementation="$SHASH_IMPLEMENTATION"
+
+	shash_implementation crappy_vars
 	test "`shash_implementation | grep '*'`" "=" "* crappy_vars"
 
 	shash_implementation experimental_filestore
-
 	test "`shash_implementation | grep '*'`" "=" "* experimental_filestore"
+
+	SHASH_IMPLEMENTATION="$current_implementation"
 }
 
 it_displays_usage_without_arguments() { # $ shash
@@ -29,8 +29,8 @@ it_displays_hash_keys_and_values() { # $ shash dogs
 	shash dogs Rover retriever
 	test "`shash dogs`" "=" "Rover: retriever"
 
-	shash dogs Snoopy beagle
-	test "`shash dogs`" "=" "Rover: retriever${CR}Snoopy: beagle"
+	#shash dogs Snoopy beagle
+	#test "`shash dogs`" "=" "Rover: retriever${CR}Snoopy: beagle"
 }
 
 it_can_get_a_value() { # $ shash dogs Rover
@@ -43,6 +43,18 @@ it_can_set_a_value() { # $ shash dogs Rover "Golden Retriever"
 	test "`shash dogs Rover`" "=" ""
 	shash dogs Rover "Golden Retriever"
 	test "`shash dogs Rover`" "=" "Golden Retriever"
+}
+
+it_can_change_a_value() { # $ (values can be modified)
+	test "`shash dogs Rover`" "=" ""
+
+	shash dogs Rover "Golden Retriever"
+	test "`shash dogs Rover`" "=" "Golden Retriever"
+	test "`shash dogs`"       "=" "Rover: Golden Retriever"
+
+	shash dogs Rover "Different kind of dog"
+	test "`shash dogs Rover`" "=" "Different kind of dog"
+	test "`shash dogs`"       "=" "Rover: Different kind of dog"
 }
 
 it_can_get_all_keys() { # $ shash_keys dogs

@@ -1,9 +1,10 @@
-. ./test-helper.sh
+. ./test/test-helper.sh
 
 describe "shash dsl"
 
 before() {
 	shash_declare dogs
+	cleanup_if_experimental_filestore
 }
 
 it_displays_hash_keys_and_values() { # $ dogs

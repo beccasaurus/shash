@@ -1,6 +1,10 @@
-. ./test-helper.sh
+. ./test/test-helper.sh
 
 describe "sharray"
+
+before() {
+	cleanup_if_experimental_filestore
+}
 
 it_displays_usage_without_arguments() { # $ sharray
 	usage=`sharray | head -n 1`

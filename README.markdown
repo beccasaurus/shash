@@ -61,7 +61,7 @@ Now that you have a few items in your Hash, there are a few ways you can use the
 
     $ git clone git@github.com:remi/shash.git
     $ cd shash/
-    $ roundup
+    $ roundup test/*-test.sh
 
 Here is the current test output, displaying usage examples.  (This uses my fork of roundup to display the command syntax)
 
