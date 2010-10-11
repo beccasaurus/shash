@@ -62,3 +62,31 @@ Now that you have a few items in your Hash, there are a few ways you can use the
     $ git clone git@github.com:remi/shash.git
     $ cd shash/
     $ roundup
+
+Here is the current test output, displaying usage examples.  (This uses my fork of roundup to display the command syntax)
+
+    shash
+      $ shash:                                         [PASS]
+      $ shash dogs:                                    [PASS]
+      $ shash dogs Rover:                              [PASS]
+      $ shash dogs Rover "Golden Retriever":           [PASS]
+      $ shash_keys dogs:                               [PASS]
+      $ shash_values dogs:                             [PASS]
+      $ shash_each dogs 'echo "$key is a $value"':     [PASS]
+      $ shash_echo dogs 'The dog $key is a $value':    [PASS]
+      $ shash_delete dogs Rover:                       [PASS]
+      $ shash_length dogs:                             [PASS]
+      $ shash_declare dogs:                            [PASS]
+      $ shash_unset dogs:                              [PASS]
+    shash dsl
+      $ dogs:                                          [PASS]
+      $ dogs Rover:                                    [PASS]
+      $ dogs Rover "Golden Retriever":                 [PASS]
+      $ dogs_keys:                                     [PASS]
+      $ dogs_values dogs:                              [PASS]
+      $ dogs_each 'echo "$key is a $value"':           [PASS]
+      $ dogs_echo 'The dog $key is a $value':          [PASS]
+      $ dogs_delete Rover:                             [PASS]
+      $ dogs_length:                                   [PASS]
+    =========================================================
+    Tests:   21 | Passed:  21 | Failed:   0
