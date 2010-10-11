@@ -13,7 +13,7 @@ To view this example code: [example.sh](/remi/shash/blob/master/examples/example
 
     . shash.sh
 
-    shash_define dogs
+    shash_declare dogs
 
     dogs Snoopy     Beagle
     dogs Scooby-Doo "Great Dane"
