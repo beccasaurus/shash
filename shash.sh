@@ -35,6 +35,11 @@ shash_keys_and_values() {
 	shash_echo "$hash" '$key: $value'
 }
 
+shash_length() {
+	hash=$1
+	printf "`shash_keys "$hash" | wc -l`"
+}
+
 shash_each() {
 	hash=$1; code=$2
 	for key in `shash_keys "$hash"`; do
@@ -64,28 +69,37 @@ shash_delete() {
 
 # Defining your own Hash helper function
 
-shash_define() {
+shash_declare() {
 	hash=$1
-eval "
-	${hash}() {
-		shash \"${hash}\" \"\$@\"
-	}
-	${hash}_keys() {
-		shash_keys \"${hash}\"
-	}
-	${hash}_values() {
-		shash_values \"${hash}\"
-	}
-	${hash}_delete() {
-		shash_delete \"${hash}\" \"\$@\"
-	}
-	${hash}_each() {
-		shash_each \"${hash}\" \"\$@\"
-	}
-	${hash}_echo() {
-		shash_echo \"${hash}\" \"\$@\"
-	}
-"
+
+	# Defines the main function, eg. 'dogs'
+	eval "${hash}() { shash \"${hash}\" \"\$@\"; }"
+
+	# Defines the additional functions, eg. 'dogs_keys' and 'dogs_values'
+	for method in keys values delete each echo length; do
+		eval "${hash}_${method}() { shash_${method} \"${hash}\" \"\$@\"; }"
+	done
+}
+
+shash_unset() {
+	hash=$1
+
+	# this is very implementation dependent!
+	# when we have many implementations, the implementation will have to be responsible for doing this itself.
+
+	# unset each hash/key variable
+	for key in `shash_keys "$hash"`; do
+		unset `__shash_variable_name_for_hash_and_key "$hash" "$key"`
+	done
+
+	# unset the variable that holds all key names
+	unset `__shash_variable_name_for_hash_keys "$hash"`
+
+	# unset all of the functions
+	unset -f "$hash"
+	for method in keys values delete each echo length; do
+		unset -f "${hash}_${method}"
+	done
 }
 
 # Private functions
@@ -123,4 +137,3 @@ __shash_get() {
 	varname=`__shash_variable_name_for_hash_and_key "$hash" "$key"`
 	eval "echo \$${varname}"
 }
-

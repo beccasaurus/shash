@@ -1,9 +1,6 @@
-. ../shash.sh
+. ./test-helper.sh
 
-CR='
-'
-
-describe "shash core"
+describe "shash"
 
 it_displays_usage_without_arguments() { # $ shash
 	usage=`shash | head -n 1`
@@ -75,4 +72,39 @@ it_can_delete_a_key() { # $ shash_delete dogs Rover
 	# FIXME deleting the last key fails?  It doesn't fail when run outside of roundup ???
 	#shash_delete dogs Snoopy
 	#test "`shash_keys dogs`" "=" ""
+}
+
+it_can_get_the_number_of_keys_in_a_hash() { # $ shash_length dogs
+	test "`shash_length dogs`" "=" "0"
+
+	shash dogs Rover "Golden Retriever"
+	test "`shash_length dogs`" "=" "1"
+
+	shash dogs Snoopy "Beagle"
+	test "`shash_length dogs`" "=" "2"
+}
+
+it_can_declare_a_new_shash() { # $ shash_declare dogs
+	test "`dogs 2>&1 | grep -o 'not found'`" "=" "not found"
+
+	shash_declare dogs
+
+	test "`dogs 2>&1 | grep -o 'not found'`" "=" ""
+}
+
+it_can_unset_a_shash() { # $ shash_unset dogs
+	test "`shash_length dogs`" "=" "0"
+
+	shash_declare dogs
+	dogs Rover  "Golden Retriever"
+	dogs Snoopy "Beagle"
+
+	test "`shash_length dogs`" "=" "2"
+	test "`dogs_length`"       "=" "2"
+	test "`dogs_length 2>&1 | grep -o 'not found'`" "=" ""
+
+	shash_unset dogs
+
+	test "`shash_length dogs`" "=" "0"
+	test "`dogs_length 2>&1 | grep -o 'not found'`" "=" "not found"
 }
